@@ -2,19 +2,19 @@
 // This is the only file you need to change to make the game your own.
 
 const GAME = {
-  title: "Chest in Chest",
-  subtitle: "Five chests. One cat. Answer well.",
+  title: "Chests in Chest",
+  subtitle: "Hỏi khó có thưởng",
 };
 
 const CHESTS = [
-  { question: "Placeholder question 1?", answer: "placeholder1" },
-  { question: "Placeholder question 2?", answer: "placeholder2" },
-  { question: "Placeholder question 3?", answer: "placeholder3" },
-  { question: "Placeholder question 4?", answer: "placeholder4" },
-  { question: "Placeholder question 5?", answer: "placeholder5" },
+  { question: "Mèo của người đẹp trai nhất Trái Đất tên gì?", answer: "Lu" },
+  { question: "Người xinh gái nhất vũ trụ thích ăn nhất con gì?", answer: "Gà" },
+  { question: "TV show mà người xinh gái nhất vũ trụ thích nhất?", answer: "Friends" },
+  { question: "Giữa cold brew của YiHeTang và Hồng Trà Ngô Gia thì người xinh gái nhất vũ trụ thích gì?", answer: "Hồng trà Ngô Gia" },
+  { question: "Tên của người xinh gái nhất vũ trụ?", answer: "Minh Hòa" },
 ];
 
 const REWARD = {
   amount: "2,000,000 VND",
-  note: "Happy birthday my love",
+  note: "Chúc mừng sinh nhật em iu!",
 };

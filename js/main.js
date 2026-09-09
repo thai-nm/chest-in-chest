@@ -67,10 +67,15 @@ function drawProgress() {
   });
 }
 
-// Chests are nested, so each one is a little smaller than the last.
+// Chests are nested, so each one is a lot smaller than the last.
+// Width is a % of the stage: 34, 25.5, 19.1, 14.3, 10.8 ...
+const CHEST_START_WIDTH = 34;
+const CHEST_SHRINK = 0.75;
+const CHEST_MIN_WIDTH = 8;
+
 function chestWidth(index) {
-  const steps = Math.max(CHESTS.length - 1, 1);
-  return 33 - 13 * (Math.min(index, steps) / steps);
+  const w = CHEST_START_WIDTH * Math.pow(CHEST_SHRINK, index);
+  return Math.max(w, CHEST_MIN_WIDTH);
 }
 
 function showChest(index, entering) {
