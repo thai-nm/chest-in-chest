@@ -26,10 +26,17 @@ let current = 0;
 let busy = false;
 let card = null;
 
-// NFC keeps Vietnamese accents comparable: some keyboards send "à" as one
-// code point, others as "a" plus a combining mark.
+// Accents are stripped for comparison. This also covers Vietnamese's two
+// valid tone-mark placements in a diphthong (old style "hòa" vs new style
+// "hoà") which mobile keyboards often default to differently than desktop.
 function normalize(text) {
-  return String(text).normalize("NFC").trim().toLowerCase().replace(/\s+/g, " ");
+  return String(text)
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/đ/gi, "d")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
 }
 
 function pick(list) {
