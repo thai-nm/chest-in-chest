@@ -1,0 +1,166 @@
+// Game flow: one chest at a time, question, answer check, then the reward.
+
+const WRONG_LINES = [
+  "The cat is not impressed.",
+  "Nope. The lock does not move.",
+  "Hmm. Try again.",
+  "The cat sighs. Wrong one.",
+  "Not it. Keep going.",
+];
+
+const RIGHT_LINES = [
+  "Click. The cat approves.",
+  "Right! The lid swings open.",
+  "Yes. The cat purrs.",
+  "Correct. One more layer.",
+];
+
+const el = {
+  title: document.getElementById("title"),
+  subtitle: document.getElementById("subtitle"),
+  progress: document.getElementById("progress"),
+  gameScene: document.getElementById("game-scene"),
+  rewardScene: document.getElementById("reward-scene"),
+  islandSlot: document.getElementById("island-slot"),
+  catSlot: document.getElementById("cat-slot"),
+  chestSlot: document.getElementById("chest-slot"),
+  question: document.getElementById("question"),
+  feedback: document.getElementById("feedback"),
+  form: document.getElementById("answer-form"),
+  input: document.getElementById("answer"),
+  submit: document.querySelector("#answer-form button"),
+  rewardAmount: document.getElementById("reward-amount"),
+  rewardNote: document.getElementById("reward-note"),
+  scratch: document.getElementById("scratch"),
+  scratchHint: document.getElementById("scratch-hint"),
+  revealAll: document.getElementById("reveal-all"),
+};
+
+let current = 0;
+let busy = false;
+let card = null;
+
+function normalize(text) {
+  return String(text).trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+function pick(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function setMood(mood) {
+  const cat = el.catSlot.querySelector(".cat");
+  if (!cat) return;
+  cat.classList.remove("mood-neutral", "mood-bad", "mood-good");
+  void cat.offsetWidth;
+  cat.classList.add("mood-" + mood);
+}
+
+function drawProgress() {
+  el.progress.innerHTML = "";
+  CHESTS.forEach((_, i) => {
+    const li = document.createElement("li");
+    if (i < current) li.className = "done";
+    else if (i === current) li.className = "current";
+    li.title = "Chest " + (i + 1);
+    el.progress.appendChild(li);
+  });
+}
+
+// Chests are nested, so each one is a little smaller than the last.
+function chestWidth(index) {
+  const steps = Math.max(CHESTS.length - 1, 1);
+  return 33 - 13 * (Math.min(index, steps) / steps);
+}
+
+function showChest(index, entering) {
+  el.chestSlot.className = "chest-slot" + (entering ? " is-entering" : "");
+  el.chestSlot.style.width = chestWidth(index) + "%";
+  el.chestSlot.innerHTML = chestArt(index);
+  el.question.textContent = CHESTS[index].question;
+  drawProgress();
+}
+
+function setFeedback(text, kind) {
+  el.feedback.textContent = text;
+  el.feedback.className = "feedback" + (kind ? " " + kind : "");
+}
+
+function wrongAnswer() {
+  setMood("bad");
+  setFeedback(pick(WRONG_LINES), "bad");
+  el.chestSlot.classList.remove("is-wrong", "is-entering");
+  void el.chestSlot.offsetWidth;
+  el.chestSlot.classList.add("is-wrong");
+  el.input.select();
+}
+
+function rightAnswer() {
+  busy = true;
+  setMood("good");
+  setFeedback(pick(RIGHT_LINES), "good");
+  el.chestSlot.classList.add("is-open");
+  el.input.value = "";
+  el.input.blur();
+  el.input.disabled = true;
+  el.submit.disabled = true;
+
+  setTimeout(() => {
+    current++;
+    if (current >= CHESTS.length) {
+      showReward();
+      return;
+    }
+    el.chestSlot.classList.add("is-leaving");
+    setTimeout(() => {
+      showChest(current, true);
+      setMood("neutral");
+      setFeedback("A smaller chest. Of course.");
+      el.input.disabled = false;
+      el.submit.disabled = false;
+      el.input.focus();
+      busy = false;
+    }, 480);
+  }, 1400);
+}
+
+function onSubmit(event) {
+  event.preventDefault();
+  if (busy) return;
+  const given = normalize(el.input.value);
+  if (!given) return;
+  if (given === normalize(CHESTS[current].answer)) rightAnswer();
+  else wrongAnswer();
+}
+
+function showReward() {
+  drawProgress();
+  el.gameScene.hidden = true;
+  el.rewardScene.hidden = false;
+  el.rewardAmount.textContent = REWARD.amount;
+  el.rewardNote.textContent = REWARD.note;
+
+  card = initScratchcard(el.scratch, {
+    threshold: 0.45,
+    onComplete: () => {
+      el.scratchHint.textContent = "It is yours. 🎉";
+      el.revealAll.hidden = true;
+    },
+  });
+  requestAnimationFrame(() => card.resize());
+}
+
+function start() {
+  document.title = GAME.title;
+  el.title.textContent = GAME.title;
+  el.subtitle.textContent = GAME.subtitle;
+  el.islandSlot.innerHTML = islandArt();
+  el.catSlot.innerHTML = catArt();
+  showChest(0, false);
+  setMood("neutral");
+  setFeedback("The cat wants an answer first.");
+  el.form.addEventListener("submit", onSubmit);
+  el.revealAll.addEventListener("click", () => card && card.revealAll());
+}
+
+start();

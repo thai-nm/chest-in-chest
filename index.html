@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chest in Chest</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧰</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="app">
+
+  <header class="head">
+    <h1 id="title">Chest in Chest</h1>
+    <p id="subtitle" class="subtitle"></p>
+    <ol id="progress" class="progress" aria-label="Chest progress"></ol>
+  </header>
+
+  <section id="game-scene" class="panel">
+    <div id="stage" class="stage">
+      <div id="island-slot" class="island-slot"></div>
+      <div id="cat-slot" class="cat-slot"></div>
+      <div id="chest-slot" class="chest-slot"></div>
+    </div>
+
+    <div class="talk">
+      <p id="question" class="question"></p>
+      <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+    </div>
+
+    <form id="answer-form" class="answer-form" autocomplete="off">
+      <label class="sr-only" for="answer">Your answer</label>
+      <input id="answer" name="answer" type="text" placeholder="Type your answer…"
+             autocapitalize="none" autocorrect="off" spellcheck="false">
+      <button type="submit">Open</button>
+    </form>
+  </section>
+
+  <section id="reward-scene" class="panel reward-scene" hidden>
+    <h2 class="reward-title">The last chest was empty…</h2>
+    <p class="reward-lead">…except for this. Scratch it.</p>
+
+    <div class="card-wrap">
+      <div class="card">
+        <div class="card-under">
+          <p id="reward-amount" class="reward-amount"></p>
+          <p id="reward-note" class="reward-note"></p>
+        </div>
+        <canvas id="scratch" class="card-cover" aria-label="Scratch card. Drag to reveal."></canvas>
+        <div class="card-shine" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <p id="scratch-hint" class="scratch-hint">Drag your finger (or mouse) across the card.</p>
+    <button id="reveal-all" class="ghost-btn" type="button">Reveal it for me</button>
+  </section>
+
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/art.js"></script>
+<script src="js/scratchcard.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
