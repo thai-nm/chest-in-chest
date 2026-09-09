@@ -19,10 +19,10 @@ function initScratchcard(canvas, options) {
     ctx.clearRect(0, 0, w, h);
 
     const g = ctx.createLinearGradient(0, 0, w, h);
-    g.addColorStop(0, "#d8b26a");
-    g.addColorStop(0.45, "#f0d79a");
-    g.addColorStop(0.55, "#c8a05a");
-    g.addColorStop(1, "#e6c583");
+    g.addColorStop(0, "#dda3a8");
+    g.addColorStop(0.45, "#f6d5cc");
+    g.addColorStop(0.55, "#cd8f9c");
+    g.addColorStop(1, "#eec0bd");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
 
@@ -35,13 +35,13 @@ function initScratchcard(canvas, options) {
       ctx.fill();
     }
 
-    ctx.fillStyle = "rgba(120, 80, 30, .55)";
+    ctx.fillStyle = "rgba(140, 65, 90, .5)";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.font = "700 " + Math.round(16 * dpr) + "px 'Nunito', system-ui, sans-serif";
     ctx.fillText("SCRATCH HERE", w / 2, h / 2 - 10 * dpr);
     ctx.font = Math.round(20 * dpr) + "px system-ui, sans-serif";
-    ctx.fillText("★  ★  ★", w / 2, h / 2 + 20 * dpr);
+    ctx.fillText("♥  ♥  ♥", w / 2, h / 2 + 20 * dpr);
   }
 
   function resize() {
