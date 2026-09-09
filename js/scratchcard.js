@@ -39,7 +39,7 @@ function initScratchcard(canvas, options) {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.font = "700 " + Math.round(16 * dpr) + "px 'Nunito', system-ui, sans-serif";
-    ctx.fillText("SCRATCH HERE", w / 2, h / 2 - 10 * dpr);
+    ctx.fillText(MESSAGES.scratchCover, w / 2, h / 2 - 10 * dpr);
     ctx.font = Math.round(20 * dpr) + "px system-ui, sans-serif";
     ctx.fillText("♥  ♥  ♥", w / 2, h / 2 + 20 * dpr);
   }

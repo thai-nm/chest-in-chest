@@ -39,9 +39,16 @@ const REWARD = {
 };
 ```
 
-Answer check is loose but simple: it trims spaces, lowercases, and
-collapses double spaces. So `" Nguyen  HUE "` matches `"Nguyen Hue"`.
-No fuzzy match beyond that.
+The same file also holds `MESSAGES`, which is every other word the
+player sees: the button, the placeholder, what the cat says when you
+are right or wrong, the text on the scratch cover, and the alt text
+for screen readers. Translate that block and the whole game changes
+language. It ships in Vietnamese.
+
+Answer check is loose but simple: it trims spaces, lowercases,
+collapses double spaces, and normalises accents to NFC so Vietnamese
+input matches whichever way the keyboard sends it. So `" GÀ "` matches
+`"Gà"`. It does not ignore accents — `"ga"` will not match `"Gà"`.
 
 You can have more or fewer than five chests. The art cycles through
 five looks, and the progress dots follow the list length.

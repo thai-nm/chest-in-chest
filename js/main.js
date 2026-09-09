@@ -1,20 +1,5 @@
 // Game flow: one chest at a time, question, answer check, then the reward.
 
-const WRONG_LINES = [
-  "The cat is not impressed.",
-  "Nope. The lock does not move.",
-  "Hmm. Try again.",
-  "The cat sighs. Wrong one.",
-  "Not it. Keep going.",
-];
-
-const RIGHT_LINES = [
-  "Click. The cat approves.",
-  "Right! The lid swings open.",
-  "Yes. The cat purrs.",
-  "Correct. One more layer.",
-];
-
 const el = {
   title: document.getElementById("title"),
   subtitle: document.getElementById("subtitle"),
@@ -27,6 +12,7 @@ const el = {
   question: document.getElementById("question"),
   feedback: document.getElementById("feedback"),
   form: document.getElementById("answer-form"),
+  answerLabel: document.querySelector('label[for="answer"]'),
   input: document.getElementById("answer"),
   submit: document.querySelector("#answer-form button"),
   rewardAmount: document.getElementById("reward-amount"),
@@ -40,8 +26,10 @@ let current = 0;
 let busy = false;
 let card = null;
 
+// NFC keeps Vietnamese accents comparable: some keyboards send "à" as one
+// code point, others as "a" plus a combining mark.
 function normalize(text) {
-  return String(text).trim().toLowerCase().replace(/\s+/g, " ");
+  return String(text).normalize("NFC").trim().toLowerCase().replace(/\s+/g, " ");
 }
 
 function pick(list) {
@@ -62,7 +50,7 @@ function drawProgress() {
     const li = document.createElement("li");
     if (i < current) li.className = "done";
     else if (i === current) li.className = "current";
-    li.title = "Chest " + (i + 1);
+    li.title = MESSAGES.altChest + " " + (i + 1);
     el.progress.appendChild(li);
   });
 }
@@ -93,7 +81,7 @@ function setFeedback(text, kind) {
 
 function wrongAnswer() {
   setMood("bad");
-  setFeedback(pick(WRONG_LINES), "bad");
+  setFeedback(pick(MESSAGES.wrong), "bad");
   el.chestSlot.classList.remove("is-wrong", "is-entering");
   void el.chestSlot.offsetWidth;
   el.chestSlot.classList.add("is-wrong");
@@ -103,7 +91,7 @@ function wrongAnswer() {
 function rightAnswer() {
   busy = true;
   setMood("good");
-  setFeedback(pick(RIGHT_LINES), "good");
+  setFeedback(pick(MESSAGES.right), "good");
   el.chestSlot.classList.add("is-open");
   el.input.value = "";
   el.input.blur();
@@ -120,7 +108,7 @@ function rightAnswer() {
     setTimeout(() => {
       showChest(current, true);
       setMood("neutral");
-      setFeedback("A smaller chest. Of course.");
+      setFeedback(MESSAGES.next);
       el.input.disabled = false;
       el.submit.disabled = false;
       el.input.focus();
@@ -148,7 +136,7 @@ function showReward() {
   card = initScratchcard(el.scratch, {
     threshold: 0.45,
     onComplete: () => {
-      el.scratchHint.textContent = "It is yours. 🎉";
+      el.scratchHint.textContent = MESSAGES.done;
       el.revealAll.hidden = true;
     },
   });
@@ -159,11 +147,16 @@ function start() {
   document.title = GAME.title;
   el.title.textContent = GAME.title;
   el.subtitle.textContent = GAME.subtitle;
+  el.answerLabel.textContent = MESSAGES.answerLabel;
+  el.input.placeholder = MESSAGES.answerPlaceholder;
+  el.submit.textContent = MESSAGES.submit;
+  el.progress.setAttribute("aria-label", MESSAGES.altProgress);
+  el.scratch.setAttribute("aria-label", MESSAGES.altCard);
   el.islandSlot.innerHTML = islandArt();
   el.catSlot.innerHTML = catArt();
   showChest(0, false);
   setMood("neutral");
-  setFeedback("The cat wants an answer first.");
+  setFeedback(MESSAGES.start);
   el.form.addEventListener("submit", onSubmit);
   el.revealAll.addEventListener("click", () => card && card.revealAll());
 }

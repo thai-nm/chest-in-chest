@@ -42,7 +42,7 @@ function chestPattern(style) {
 function chestArt(index) {
   const s = CHEST_STYLES[index % CHEST_STYLES.length];
   return `
-<svg class="chest" viewBox="0 0 140 130" role="img" aria-label="Treasure chest ${index + 1}">
+<svg class="chest" viewBox="0 0 140 130" role="img" aria-label="${MESSAGES.altChest} ${index + 1}">
   <defs>
     <radialGradient id="glow${index}" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#fff6c9" stop-opacity=".95"/>
@@ -101,7 +101,7 @@ function catArt() {
   const dark = "#38323a";
 
   return `
-<svg class="cat" viewBox="0 0 120 140" role="img" aria-label="A grey tabby cat sitting on the island">
+<svg class="cat" viewBox="0 0 120 140" role="img" aria-label="${MESSAGES.altCat}">
   <ellipse cx="60" cy="132" rx="38" ry="7" fill="#000" opacity=".15"/>
 
   <g class="cat-tail">
@@ -171,7 +171,7 @@ function catArt() {
 
 function islandArt() {
   return `
-<svg class="island" viewBox="0 0 400 300" role="img" aria-label="A small island with a coconut tree">
+<svg class="island" viewBox="0 0 400 300" role="img" aria-label="${MESSAGES.altIsland}">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#ffc9dd"/>
